@@ -5,7 +5,8 @@ __pycache__/
 .pytest_cache/
 .env
 .idea/
-.vscode/
+.vscode/*
+!.vscode/launch.json
 dist/
 build/
 *.egg-info/

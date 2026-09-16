@@ -23,8 +23,15 @@ def get_submission_status(submitted_at, deadline):
     return "Проект сдан после дедлайна"
 
 
-def get_jury_decision(idea_score, prototype_score, presentation_score, passing_score):
-    total_score = idea_score + prototype_score + presentation_score
+def calculate_total_score(idea_score, prototype_score, presentation_score):
+    return idea_score + prototype_score + presentation_score
+
+
+def calculate_average_score(total_score):
+    return total_score / 3
+
+
+def get_jury_decision(total_score, passing_score):
     if total_score >= passing_score:
         return f"Проект проходит в финал, итоговый балл: {total_score:.1f}"
     return f"Проект требует доработки, итоговый балл: {total_score:.1f}"
@@ -69,10 +76,14 @@ def main():
         has_student_discount,
     )
     submission_status = get_submission_status(submitted_at, deadline)
-    jury_decision = get_jury_decision(
+    total_score = calculate_total_score(
         idea_score,
         prototype_score,
         presentation_score,
+    )
+    average_score = calculate_average_score(total_score)
+    jury_decision = get_jury_decision(
+        total_score,
         passing_score,
     )
 
@@ -85,6 +96,7 @@ def main():
     print(f"Срок сдачи проекта: {deadline.strftime('%d.%m.%Y %H:%M')}")
     print(f"Фактическая сдача: {submitted_at.strftime('%d.%m.%Y %H:%M')}")
     print(f"Статус сдачи: {submission_status}")
+    print(f"Средний балл жюри: {average_score:.2f}")
     print(jury_decision)
 
 
