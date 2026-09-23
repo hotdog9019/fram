@@ -1,0 +1,10 @@
+{
+  "id": 1,
+  "name": "MIREA Hack 2026",
+  "max_teams": 20,
+  "registration_is_open": true,
+  "fee_per_participant": 700,
+  "student_discount_percent": 20,
+  "submission_deadline": "2026-09-16 20:00",
+  "passing_score": 22
+}

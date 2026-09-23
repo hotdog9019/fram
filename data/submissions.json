@@ -1,0 +1,22 @@
+[
+  {
+    "team_id": 1,
+    "project_name": "HackFlow Portal",
+    "submitted_at": "2026-09-16 18:20",
+    "scores": {
+      "idea": 8.5,
+      "prototype": 9.0,
+      "presentation": 7.5
+    }
+  },
+  {
+    "team_id": 2,
+    "project_name": "Mentor Match",
+    "submitted_at": "2026-09-16 20:15",
+    "scores": {
+      "idea": 8.0,
+      "prototype": 6.5,
+      "presentation": 7.0
+    }
+  }
+]

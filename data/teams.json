@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "name": "CodePulse",
+    "participants": [
+      "Артём Элизбарян",
+      "Иван Петров",
+      "Мария Смирнова",
+      "Даниил Орлов"
+    ],
+    "status": "registered",
+    "has_student_discount": true
+  },
+  {
+    "id": 2,
+    "name": "DataStorm",
+    "participants": [
+      "Анна Волкова",
+      "Кирилл Соколов",
+      "Полина Морозова"
+    ],
+    "status": "registered",
+    "has_student_discount": true
+  },
+  {
+    "id": 3,
+    "name": "Backend Crew",
+    "participants": [
+      "Никита Егоров",
+      "Софья Лебедева"
+    ],
+    "status": "cancelled",
+    "has_student_discount": false
+  }
+]

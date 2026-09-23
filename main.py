@@ -1,103 +1,93 @@
 import sys
-from datetime import datetime
+from copy import deepcopy
+from pathlib import Path
+
+from hackflow.statistics import build_hackathon_statistics
+from hackflow.storage import load_json
+from hackflow.submissions import (
+    calculate_average_score,
+    calculate_total_score,
+    find_submission_by_team_id,
+    get_jury_decision,
+    get_submission_status,
+    sort_projects_by_score,
+)
+from hackflow.teams import (
+    add_team_registration,
+    calculate_participation_fee,
+    cancel_team_registration,
+    find_teams_by_name,
+    is_registration_available,
+    sort_teams_by_name,
+)
+from hackflow.utils import format_datetime, parse_datetime
 
 
-def get_registration_status(registered_teams, max_teams, registration_is_open):
-    if not registration_is_open:
-        return "Регистрация закрыта организатором"
-    if registered_teams >= max_teams:
-        return "Регистрация невозможна: лимит команд уже достигнут"
-    return "Регистрация доступна"
-
-
-def calculate_participation_fee(participant_count, fee_per_participant, has_discount):
-    total_fee = participant_count * fee_per_participant
-    if has_discount:
-        return total_fee * 0.8
-    return total_fee
-
-
-def get_submission_status(submitted_at, deadline):
-    if submitted_at <= deadline:
-        return "Проект сдан вовремя"
-    return "Проект сдан после дедлайна"
-
-
-def calculate_total_score(idea_score, prototype_score, presentation_score):
-    return idea_score + prototype_score + presentation_score
-
-
-def calculate_average_score(total_score):
-    return total_score / 3
-
-
-def get_jury_decision(total_score, passing_score):
-    if total_score >= passing_score:
-        return f"Проект проходит в финал, итоговый балл: {total_score:.1f}"
-    return f"Проект требует доработки, итоговый балл: {total_score:.1f}"
+DATA_DIR = Path("data")
 
 
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
 
-    hackathon_name = "MIREA Hack 2026"
-    team_name = "CodePulse"
-    participant_count_text = "4"
-    registered_teams_text = "17"
-    max_teams_text = "20"
-    fee_per_participant_text = "700"
-    submitted_at_text = "2026-09-16 18:20"
-    deadline_text = "2026-09-16 20:00"
-    idea_score_text = "8.5"
-    prototype_score_text = "9"
-    presentation_score_text = "7.5"
-    registration_is_open = True
-    has_student_discount = True
-    passing_score = 22
+    try:
+        hackathon = load_json(DATA_DIR / "hackathon.json")
+        teams = load_json(DATA_DIR / "teams.json")
+        submissions = load_json(DATA_DIR / "submissions.json")
+    except (FileNotFoundError, ValueError) as error:
+        print(error)
+        return
 
-    participant_count = int(participant_count_text)
-    registered_teams = int(registered_teams_text)
-    max_teams = int(max_teams_text)
-    fee_per_participant = int(fee_per_participant_text)
-    submitted_at = datetime.strptime(submitted_at_text, "%Y-%m-%d %H:%M")
-    deadline = datetime.strptime(deadline_text, "%Y-%m-%d %H:%M")
-    idea_score = float(idea_score_text)
-    prototype_score = float(prototype_score_text)
-    presentation_score = float(presentation_score_text)
+    team = teams[0]
+    submission = find_submission_by_team_id(submissions, int(team["id"]))
+    if submission is None:
+        print("Для выбранной команды нет сданного проекта")
+        return
 
-    registration_status = get_registration_status(
-        registered_teams,
-        max_teams,
-        registration_is_open,
+    demo_teams = deepcopy(teams)
+    new_team = add_team_registration(
+        hackathon,
+        demo_teams,
+        "Frontend Force",
+        ["Елена Козлова", "Павел Захаров"],
+        True,
     )
-    participation_fee = calculate_participation_fee(
-        participant_count,
-        fee_per_participant,
-        has_student_discount,
-    )
-    submission_status = get_submission_status(submitted_at, deadline)
-    total_score = calculate_total_score(
-        idea_score,
-        prototype_score,
-        presentation_score,
-    )
-    average_score = calculate_average_score(total_score)
+    cancelled_team = cancel_team_registration(demo_teams, int(new_team["id"]))
+
+    scores = submission["scores"]
+    total_score = calculate_total_score(scores)
+    average_score = calculate_average_score(scores)
+    participation_fee = calculate_participation_fee(team, hackathon)
+    submitted_at = parse_datetime(str(submission["submitted_at"]))
+    deadline = parse_datetime(str(hackathon["submission_deadline"]))
+    registration_status = "Регистрация доступна"
+    if not is_registration_available(hackathon, teams):
+        registration_status = "Регистрация недоступна"
+
+    statistics = build_hackathon_statistics(hackathon, teams, submissions)
+    sorted_teams = sort_teams_by_name(teams)
+    search_results = find_teams_by_name(teams, "code")
+    sorted_projects = sort_projects_by_score(submissions)
     jury_decision = get_jury_decision(
         total_score,
-        passing_score,
+        float(hackathon["passing_score"]),
     )
 
-    print(f"Хакатон: {hackathon_name}")
-    print(f"Команда: {team_name}")
-    print(f"Участников в команде: {participant_count}")
-    print(f"Зарегистрировано команд: {registered_teams} из {max_teams}")
+    print(f"Хакатон: {hackathon['name']}")
+    print(f"Команда: {team['name']}")
+    print(f"Участников в команде: {len(team['participants'])}")
     print(f"Статус регистрации: {registration_status}")
     print(f"Организационный взнос: {participation_fee:.0f} руб.")
-    print(f"Срок сдачи проекта: {deadline.strftime('%d.%m.%Y %H:%M')}")
-    print(f"Фактическая сдача: {submitted_at.strftime('%d.%m.%Y %H:%M')}")
-    print(f"Статус сдачи: {submission_status}")
+    print(f"Срок сдачи проекта: {format_datetime(deadline)}")
+    print(f"Фактическая сдача: {format_datetime(submitted_at)}")
+    print(f"Статус сдачи: {get_submission_status(submission, hackathon)}")
     print(f"Средний балл жюри: {average_score:.2f}")
     print(jury_decision)
+    print(f"Новая заявка: {new_team['name']}")
+    print(f"Отмена заявки: {cancelled_team['status']}")
+    print(f"Команды по алфавиту: {', '.join(team['name'] for team in sorted_teams)}")
+    print(f"Поиск по 'code': {len(search_results)} команда")
+    print(f"Лучший проект: {sorted_projects[0]['project_name']}")
+    print(f"Финалистов: {statistics['finalists']}")
 
 
 if __name__ == "__main__":
