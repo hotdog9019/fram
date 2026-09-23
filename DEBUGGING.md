@@ -5,8 +5,12 @@
 Откройте файл `main.py` и поставьте breakpoints на строках:
 
 - `total_score = calculate_total_score(`
-- `average_score = calculate_average_score(total_score)`
+- `average_score = calculate_average_score(scores)`
 - `jury_decision = get_jury_decision(`
+
+Дополнительно можно поставить breakpoint в `hackflow/submissions.py` на строке:
+
+- `return calculate_total_score(scores) / len(scores)`
 
 После этого откройте раздел Run and Debug в VS Code и запустите конфигурацию `Python: HackFlow`.
 
@@ -24,18 +28,19 @@
 
 ## Как показать поиск ошибки
 
-1. Временно измените строку `return total_score / 3` на `return total_score / 4`.
+1. Временно измените строку `return calculate_total_score(scores) / len(scores)` на `return calculate_total_score(scores) / 4`.
 2. Запустите отладку заново.
-3. На строке `average_score = calculate_average_score(total_score)` нажмите Step Into.
+3. На строке `average_score = calculate_average_score(scores)` нажмите Step Into.
 4. Покажите, что `total_score` равен `25.0`, но `average_score` получается `6.25`.
 5. Объясните, что ошибка в неверном делителе.
-6. Верните строку к правильному виду: `return total_score / 3`.
+6. Верните строку к правильному виду: `return calculate_total_score(scores) / len(scores)`.
 
 ## Команды для проверки
 
 ```powershell
 python main.py
-python -m py_compile main.py
+python -m pytest
+python -m flake8
 git status
 git log --oneline
 ```
