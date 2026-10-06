@@ -18,5 +18,25 @@
       "prototype": 6.5,
       "presentation": 7.0
     }
+  },
+  {
+    "team_id": 4,
+    "project_name": "PitchBoard",
+    "submitted_at": "2026-09-16 19:40",
+    "scores": {
+      "idea": 7.5,
+      "prototype": 8.0,
+      "presentation": 8.5
+    }
+  },
+  {
+    "team_id": 5,
+    "project_name": "Smart Queue",
+    "submitted_at": "2026-09-16 17:55",
+    "scores": {
+      "idea": 9.0,
+      "prototype": 8.5,
+      "presentation": 8.0
+    }
   }
 ]

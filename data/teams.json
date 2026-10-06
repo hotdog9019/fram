@@ -3,7 +3,7 @@
     "id": 1,
     "name": "CodePulse",
     "participants": [
-      "Артём Элизбарян",
+      "Артем Элизбарян",
       "Иван Петров",
       "Мария Смирнова",
       "Даниил Орлов"
@@ -31,5 +31,26 @@
     ],
     "status": "cancelled",
     "has_student_discount": false
+  },
+  {
+    "id": 4,
+    "name": "Interface Lab",
+    "participants": [
+      "Елена Козлова",
+      "Павел Захаров",
+      "Алина Романова"
+    ],
+    "status": "registered",
+    "has_student_discount": false
+  },
+  {
+    "id": 5,
+    "name": "NeuroStack",
+    "participants": [
+      "Матвей Федоров",
+      "Дарья Новикова"
+    ],
+    "status": "registered",
+    "has_student_discount": true
   }
 ]

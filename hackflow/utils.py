@@ -19,7 +19,12 @@ def format_datetime(value: datetime) -> str:
     return value.strftime("%d.%m.%Y %H:%M")
 
 
-def get_next_id(items: list[dict[str, Any]]) -> int:
-    """Return next numeric identifier for a list of dictionaries."""
-    identifiers = [int(item.get("id", 0)) for item in items]
+def get_next_id(items: list[Any]) -> int:
+    """Return next numeric identifier for dictionaries or objects."""
+    identifiers = []
+    for item in items:
+        if isinstance(item, dict):
+            identifiers.append(int(item.get("id", 0)))
+        else:
+            identifiers.append(int(getattr(item, "id", 0)))
     return max(identifiers, default=0) + 1
