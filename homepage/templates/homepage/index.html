@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}HackFlow{% endblock %}
+
+{% block content %}
+<section class="mb-4">
+  <h1 class="display-4">HackFlow</h1>
+  <p class="lead">
+    Веб-интерфейс для организации хакатона {{ hackathon.name|default:"без названия" }}.
+  </p>
+  <a href="{% url 'teams:teams' %}" class="btn btn-primary me-2">Команды</a>
+  <a href="{% url 'submissions:submissions' %}" class="btn btn-secondary">Проекты</a>
+</section>
+
+<section class="row g-3">
+  <div class="col-md-4">
+    <div class="hf-stat">
+      <h2 class="h5">Команды</h2>
+      <p class="fs-3 mb-0">{{ statistics.registered_teams|default:0 }}</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="hf-stat">
+      <h2 class="h5">Участники</h2>
+      <p class="fs-3 mb-0">{{ statistics.participants|default:0 }}</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="hf-stat">
+      <h2 class="h5">Финалисты</h2>
+      <p class="fs-3 mb-0">{{ statistics.finalists|default:0 }}</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

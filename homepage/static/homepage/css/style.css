@@ -1,0 +1,24 @@
+body {
+  background: #f8fafc;
+}
+
+.hf-logo {
+  height: 32px;
+  width: 32px;
+}
+
+.hf-stat {
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.card,
+.list-group-item {
+  border-color: #dee2e6;
+}
+
+main.container {
+  min-height: calc(100vh - 150px);
+}

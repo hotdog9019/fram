@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}HackFlow - команды{% endblock %}
+
+{% block content %}
+<h1>Команды</h1>
+<p class="text-muted">
+  Хакатон: {{ hackathon.name }}. Сданных проектов: {{ submissions|length }}.
+</p>
+
+{% if teams %}
+  <ul class="list-group">
+    {% for team in teams %}
+      {% include "teams/includes/team_card.html" %}
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Команды пока не зарегистрированы.</p>
+{% endif %}
+{% endblock %}

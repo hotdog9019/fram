@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}HackFlow - проекты{% endblock %}
+
+{% block content %}
+<h1>Сданные проекты</h1>
+<p class="text-muted">Всего команд: {{ teams|length }}.</p>
+
+{% if submissions %}
+  <ul class="list-group">
+    {% for submission in submissions %}
+      {% include "submissions/includes/submission_card.html" %}
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Проекты пока не сданы.</p>
+{% endif %}
+{% endblock %}

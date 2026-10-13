@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {% if submission %}{{ submission.project_name }}{% else %}Проект не найден{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if submission %}
+  <div class="card">
+    <div class="card-body">
+      <h1 class="card-title h3">{{ submission.project_name }}</h1>
+      <p><strong>Команда:</strong> {{ submission.team.name }}</p>
+      <p><strong>Время сдачи:</strong> {{ submission.submitted_at }}</p>
+      <p><strong>Статус сдачи:</strong> {{ status_text }}</p>
+      <p><strong>Решение жюри:</strong> {{ jury_decision }}</p>
+      <p>
+        <strong>Итоговый балл:</strong>
+        {{ submission.calculate_total_score|floatformat:1 }}
+      </p>
+
+      <h2 class="h5">Оценки</h2>
+      <ul class="list-group mb-3">
+        {% for name, score in submission.scores.items %}
+          <li class="list-group-item">{{ name }}: {{ score|floatformat:1 }}</li>
+        {% empty %}
+          <li class="list-group-item">Оценки не указаны.</li>
+        {% endfor %}
+      </ul>
+
+      <a href="{% url 'submissions:submissions' %}" class="btn btn-outline-secondary">
+        К списку проектов
+      </a>
+    </div>
+  </div>
+{% else %}
+  <h1 class="text-danger">Проект не найден</h1>
+  <a href="{% url 'submissions:submissions' %}" class="btn btn-outline-secondary">
+    К списку проектов
+  </a>
+{% endif %}
+{% endblock %}

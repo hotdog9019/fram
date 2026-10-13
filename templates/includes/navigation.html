@@ -1,0 +1,18 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg bg-body-tertiary mb-4 border-bottom">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'homepage:index' %}">
+      <img
+        class="hf-logo"
+        src="{% static 'homepage/img/logo.svg' %}"
+        alt="HackFlow"
+      >
+      <span>HackFlow</span>
+    </a>
+    <div class="navbar-nav">
+      <a class="nav-link" href="{% url 'homepage:index' %}">Главная</a>
+      <a class="nav-link" href="{% url 'teams:teams' %}">Команды</a>
+      <a class="nav-link" href="{% url 'submissions:submissions' %}">Проекты</a>
+    </div>
+  </div>
+</nav>

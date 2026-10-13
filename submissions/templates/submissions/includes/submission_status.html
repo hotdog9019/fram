@@ -1,0 +1,5 @@
+{% if submission.calculate_total_score >= hackathon.passing_score %}
+  <span class="badge bg-success">финал</span>
+{% else %}
+  <span class="badge bg-warning text-dark">доработка</span>
+{% endif %}

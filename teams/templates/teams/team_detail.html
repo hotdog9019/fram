@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {% if team %}{{ team.name }}{% else %}Команда не найдена{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if team %}
+  <div class="card">
+    <div class="card-body">
+      <h1 class="card-title h3">{{ team.name }}</h1>
+      <p>
+        <strong>Статус:</strong>
+        {% if team.is_registered %}
+          <span class="badge bg-success">зарегистрирована</span>
+        {% else %}
+          <span class="badge bg-secondary">отменена</span>
+        {% endif %}
+      </p>
+      <p>
+        <strong>Организационный взнос:</strong>
+        {{ participation_fee|floatformat:0 }} руб.
+      </p>
+
+      <h2 class="h5">Участники</h2>
+      <ul class="list-group mb-3">
+        {% for participant in team.participants %}
+          <li class="list-group-item">{{ participant }}</li>
+        {% empty %}
+          <li class="list-group-item">Участники не указаны.</li>
+        {% endfor %}
+      </ul>
+
+      <h2 class="h5">Проект</h2>
+      {% if submission %}
+        <p>
+          <a href="{% url 'submissions:submission_detail' submission.team_id %}">
+            {{ submission.project_name|default:"Без названия" }}
+          </a>
+        </p>
+      {% else %}
+        <p>Проект еще не сдан.</p>
+      {% endif %}
+
+      <a href="{% url 'teams:teams' %}" class="btn btn-outline-secondary">
+        К списку команд
+      </a>
+    </div>
+  </div>
+{% else %}
+  <h1 class="text-danger">Команда не найдена</h1>
+  <a href="{% url 'teams:teams' %}" class="btn btn-outline-secondary">
+    К списку команд
+  </a>
+{% endif %}
+{% endblock %}

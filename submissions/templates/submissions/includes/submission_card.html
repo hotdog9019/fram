@@ -1,0 +1,9 @@
+<li class="list-group-item d-flex justify-content-between align-items-center">
+  <a href="{% url 'submissions:submission_detail' submission.team_id %}">
+    {{ submission.project_name|default:"Без названия" }}
+  </a>
+  <span>
+    {% include "submissions/includes/submission_status.html" %}
+    <span class="ms-2">{{ submission.calculate_total_score|floatformat:1 }}</span>
+  </span>
+</li>
